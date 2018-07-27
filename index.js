@@ -66,7 +66,6 @@ const fetchShopData = async (shop, accessToken) => await axios(buildShopDataRequ
 
 
 
-
 //functions to send mail through regular gmail in case Mandrill runs out of mail sends
 
 function getReceiver(receiver,eta_product){
@@ -120,27 +119,4 @@ transport.sendMail({
 });
 }
 
-//////////////////////////Firebase functions///////////////////////
-
-var vesRef = db.collection('Vessel');
-function insertID(){
-    
-}
-
-function query(){
-    var query = vesRef.where('product_id', '==', 756565656454).get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        console.log(doc.id, '=>', doc.data().variant_id);
-        console.log(doc.data().variant_id.length);
-      });
-    })
-    .catch(err => {
-      console.log('Error getting documents', err);
-    });
-}
-
-///////////// Start the Server /////////////
-
-app.listen(PORT, () => console.log(`listening on port ${PORT}`));
 
