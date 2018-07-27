@@ -11,8 +11,21 @@
     "test": "node test.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "cookie": "^0.3.1",
+    "cors": "^2.8.4",
+    "crypto": "^1.0.1",
+    "dotenv": "^6.0.0",
     "ejs": "^2.5.6",
-    "express": "^4.15.2"
+    "express": "^4.16.3",
+    "firebase-admin": "^5.13.1",
+    "nodemailer": "^4.6.7",
+    "nodemailer-mandrill-transport": "^1.2.0",
+    "nonce": "^1.0.4",
+    "path": "^0.12.7",
+    "querystring": "^0.2.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "request": "^2.81.0",
