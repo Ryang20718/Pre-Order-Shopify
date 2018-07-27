@@ -18,6 +18,16 @@ var mandrillTransport = require('nodemailer-mandrill-transport');
 var admin = require("firebase-admin");
 //var serviceAccount = require("./key.json");
 
+//Google Firebase SDK credentials initialization
+/*
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://preorder-inventory.firebaseio.com"
+});
+
+const db = admin.firestore();
+*/
+
 const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
 const shopifyApiSecretKey = process.env.SHOPIFY_API_SECRET_KEY;
@@ -213,6 +223,26 @@ transport.sendMail({
     console.log(info);
   }
 });
+}
+
+//////////////////////////Firebase functions///////////////////////
+
+//var vesRef = db.collection('Vessel');
+function insertID(){
+    
+}
+
+function query(){
+    var query = vesRef.where('product_id', '==', 756565656454).get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        console.log(doc.id, '=>', doc.data().variant_id);
+        console.log(doc.data().variant_id.length);
+      });
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
 }
 
 ///////////// Start the Server /////////////
