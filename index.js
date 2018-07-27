@@ -83,6 +83,12 @@ app.get('/test', cors(), function(req, res){
     res.send('Firebase')
 });
 
+app.get('/getResults', (req, res) => {//the resulting page containing all sold out variants and ETA dates
+  var temp = addFB("545454545*2323232","32-23-23*04-23-19");  
+  var result_array = getFB(temp);
+  res.send(JSON.stringify(temp))
+});
+
 app.post('/email', cors(), function(req, res){
     getReceiver(req.body.email,req.body.message);
     vesselMandrill(req.body.email,req.body.message);
@@ -232,24 +238,49 @@ transport.sendMail({
 
 //////////////////////////Firebase functions///////////////////////
 
-//var vesRef = db.collection('Vessel');
-function insertFB(){
-    
+
+function addFB(variantID,ETA){//handles strings separated with *
+    var v_array = variantID.split("*"); //splits based on SHOPIFY for each product
+    var ETA_array = ETA.split("*"); //splits ETA dates based on shopify for each product added
+    var product_array = [];
+    for(var i = 0; i < v_array.length; i++){
+        var obj = {//object that will be inside the array
+        id: v_array[i],
+        msg: ETA_array[i],
+        };
+         db.collection('Vessel').doc(v_array[i]).set(obj);
+        product_array.push(obj);
+    }
+    //product_array contains an array of the objects
+    console.log(product_array);  
+    return product_array;
 }
 
-function queryFB(){
-    /*
-    var query = vesRef.where('product_id', '==', 756565656454).get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        console.log(doc.id, '=>', doc.data().variant_id);
-        console.log(doc.data().variant_id.length);
-      });
-    })
-    .catch(err => {
-      console.log('Error getting documents', err);
-    });
-    */
+function getFB(array){//currently need to work on this function 
+var result_array = [];
+for(var i = 0; i < array.length; i++){
+var docRef = db.collection("Vessel").doc(array[i].id);
+
+docRef.get().then(function(doc) {
+    if (doc.exists) {
+        var obj = {//object that will be inside the array
+        id: doc.data().id,
+        msg: doc.data().msg,
+        };
+        result_array.push(obj);
+        console.log("result arraay" + result_array[i].id);
+        console.log("Document data:", obj);
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+}); 
+}
+    
+    return result_array;
+
 }
 
 ///////////// Start the Server /////////////
