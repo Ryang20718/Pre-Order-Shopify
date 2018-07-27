@@ -14,19 +14,20 @@ var bodyParser = require('body-parser')
 //mandrill
 var nodemailer = require('nodemailer');
 var mandrillTransport = require('nodemailer-mandrill-transport');
-//firebase
+///////////firebase admin sdk///////////////
 var admin = require("firebase-admin");
-//var serviceAccount = require("./key.json");
 
-//Google Firebase SDK credentials initialization
-/*
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://preorder-inventory.firebaseio.com"
+  credential: admin.credential.cert({
+  "project_id": process.env.FIREBASE_PROJECT_ID,
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC6w+jr51muRD/+\nRxDX9ViVlZ/9G7oQX+QaYk+T2qvdbBolv7FIJMvMedpBDZJIlVLdh59UNww2K/H8\nD+NlSKTU1xDZzkO+eMDHsa/ZFmHqX+f7O9f5y+uWMVWG6Gd3LnSqWdTCcgY4H/G7\nXGUQUj8oojGLaaMvhwiqRwrZUj4rC24u46grpJkM8Kfi4FsJPLlZeqS24G/ZGzap\n7RRhYF+1hdbWFv0WB0J8XlsqpdiR8+9ZVEAfPHUTTBQWNpM/ld6VQ9FWhDrrqnUX\nVgTggxXZYpL3Pdv4v2U5yYAnG2Tko/WWVfx4VEBkIYAfPaOyBP7Q+7qyro24/K4b\nWrrLC8unAgMBAAECggEAQ0u9PWd+zobEIjz8Kjy6/ydLXzni6OyMdh9PekC0ZdQC\ndfClEhBEKPkNNhyMRcAcfDtWo1M0gL6D8qXM851h21llNn4Wteav3CS/7rKcdIW7\nQrEVCOq8CEHdhf9u7KheHFXDDo9kg0urYC4SMnfYTy1mOcxGIyV+b1Cq7ZSvVvWo\nv+a1jUnmClM83+eZRjwdxJoB45nYmVuQFjdR5Lp/8jpPYEnf3Ul4HRnQiPdejDVl\nOD+boflIuKMTezVaJNVEiqTQBwD1xZTsh9+4sypCKkIxEwiutrkTqh40lbSuwQ7E\nluZENopL7hZlZSrIyR8qXGh5W6BmZJpxVYW90iFipQKBgQDul3rmIRr/PaKGQlUz\nHbhplcBDFXdxI/obqfpbtVy8GPg9ejHJ+Dh4lQQfm4TaUYxwTD+JY8KgvvIvoxRv\nMJCIocXGOT7jb1zUOgauQkZNd4EwtunFvKFoxAQzbUlTCoWt7l90Nxnqx2TKm4wU\n89WS3BqWWqAplLYS8llGmvHHuwKBgQDIZGSS7VU7FJobXtUWll0SwtNFneEAGpIA\ni5Qflqi0YTldbK9bcUR3dAopOsyipsOCIj0UrubG/aHj55TjCfsXsYLs4wM3HrI9\nl5Lhkj4XRUiwA+pTp4ZMK5lw6dTiI5o11mKG7GjMZAUdatgzOzk40zyhRxOksXUQ\npGwCfxXfBQKBgAuKZDVxcH7cGlpoJvrb+ymQRsZ36VkdpmFkLWn2MdAfXRKMMJBW\nY1Th0Fs/CIQO4b4k0gXxP17LHafUOY7PSI5zVL+r0TDrGBBj5iLTrdbdavBSSKh5\n4UzR/moGZT+RCLpLB271o1lJ38Q1FeeFi9UYtGiFZa3dNZlhA5R4ti01AoGAOWiB\nY5I4Y5eQWpz9YN4sxc4opn4HUndKMnvKMI6BwENGItybFBBL9Ai7THp623H4+pQC\neaVtmb5ZnaffgHeAhpYlEuYqKqVRnNGKk7LItPP1Ue+dNt/8Wl/3MmDayvo2GIxV\nZ5/cmglhab8NNwgVaZEignWRTBJGnkDsbH6p7l0CgYBu0YfsUFToxam70IxVF9kq\nNMnVlLZIot6OVD6BCEeuMNI3ohZ3oJFLZAT7ngerjh0c48mrWz2qDVXYAuq28wcU\nySUmK4p6WlVUIAsvQGXRIABDiOfWkuBMWW+6hGb/DgBP9M4pVDVgr0Mmcc0wfypX\nezB5fhz8oiX/oBaI/ZK4bA==\n-----END PRIVATE KEY-----\n",
+  "client_email": process.env.FIREBASE_CLIENT_EMAIL,
+  }),
+  databaseURL: process.env.FIREBASE_URL
 });
-
 const db = admin.firestore();
-*/
+
+///////////////End FireBase admin////////////
 
 const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
@@ -77,6 +78,10 @@ app//homepage
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
 
+app.get('/test', cors(), function(req, res){
+    queryFB();
+    res.send('Firebase')
+});
 
 app.post('/email', cors(), function(req, res){
     getReceiver(req.body.email,req.body.message);
@@ -228,11 +233,12 @@ transport.sendMail({
 //////////////////////////Firebase functions///////////////////////
 
 //var vesRef = db.collection('Vessel');
-function insertID(){
+function insertFB(){
     
 }
 
-function query(){
+function queryFB(){
+    /*
     var query = vesRef.where('product_id', '==', 756565656454).get()
     .then(snapshot => {
       snapshot.forEach(doc => {
@@ -243,6 +249,7 @@ function query(){
     .catch(err => {
       console.log('Error getting documents', err);
     });
+    */
 }
 
 ///////////// Start the Server /////////////
