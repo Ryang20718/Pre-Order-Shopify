@@ -33,11 +33,6 @@ app.use(bodyParser.json());
 //enable CORS 
 app.use(cors())
 
-app
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
 
 
 ///////////// Helper Functions /////////////
@@ -65,6 +60,12 @@ const fetchShopData = async (shop, accessToken) => await axios(buildShopDataRequ
 });
 
 ///////////// Route Handlers /////////////
+
+app//homepage
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
 
 
 app.post('/email', cors(), function(req, res){
