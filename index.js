@@ -33,12 +33,11 @@ app.use(bodyParser.json());
 //enable CORS 
 app.use(cors())
 
-express()
+app
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 
 ///////////// Helper Functions /////////////
@@ -64,4 +63,84 @@ const fetchShopData = async (shop, accessToken) => await axios(buildShopDataRequ
     'X-Shopify-Access-Token': accessToken
   }
 });
+
+
+
+
+//functions to send mail through regular gmail in case Mandrill runs out of mail sends
+
+function getReceiver(receiver,eta_product){
+    
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+
+var mailOptions = {
+  from: 'youremail@gmail.com',
+  to: receiver,
+  subject: 'Vessel Pre Order',
+  text: eta_product
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+}
+
+//mandrill function
+function vesselMandrill(receiver,message){
+
+ 
+var transport = nodemailer.createTransport(mandrillTransport({
+  auth: {
+    apiKey: process.env.MANDRILL_API
+  }
+}));
+ 
+transport.sendMail({
+  from: 'info@vesselbags.com',
+  to: receiver,
+  subject: 'Vessel Pre Order',
+  html: message
+}, function(err, info) {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(info);
+  }
+});
+}
+
+//////////////////////////Firebase functions///////////////////////
+
+var vesRef = db.collection('Vessel');
+function insertID(){
+    
+}
+
+function query(){
+    var query = vesRef.where('product_id', '==', 756565656454).get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        console.log(doc.id, '=>', doc.data().variant_id);
+        console.log(doc.data().variant_id.length);
+      });
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
+}
+
+///////////// Start the Server /////////////
+
+app.listen(PORT, () => console.log(`listening on port ${PORT}`));
 
