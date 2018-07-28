@@ -33,7 +33,7 @@ const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
 const shopifyApiSecretKey = process.env.SHOPIFY_API_SECRET_KEY;
 const scopes = 'write_products';
-const appUrl = 'https://preorder-app.herokuapp.com';
+const appUrl = 'https://54f560ed.ngrok.io';//'https://preorder-app.herokuapp.com';
 
 //body parser
 app.use(bodyParser.urlencoded({ extended: false })) 
@@ -77,18 +77,22 @@ app//homepage
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
+/*
+//firebase getResults Route
+app.get('/getResults', async (req, res) => {
+  var result_array = await getFB();
+  res.send(result_array)
+});*/
 
-app.get('/test', cors(), function(req, res){
-    queryFB();
-    res.send('Firebase')
+//shopify posts results to firebase cloudstore
+app.post('/postResults', cors(), function(req, res){
+    //addFB(req.body.variantID,req.body.ETA);//adds to database
+    console.log(req.body.ETA);
+    console.log(req.body.variantID);
+  res.send(req.body.ETA)
 });
 
-app.get('/getResults', (req, res) => {//the resulting page containing all sold out variants and ETA dates
-  var temp = addFB("545454545*2323232","32-23-23*04-23-19");  
-  var result_array = getFB(temp);
-  res.send(JSON.stringify(temp))
-});
-
+//mandrill email
 app.post('/email', cors(), function(req, res){
     getReceiver(req.body.email,req.body.message);
     vesselMandrill(req.body.email,req.body.message);
@@ -134,7 +138,7 @@ app.get('/shopify/callback', async (req, res) => {
     
 });
 */
-
+//shopify verification
 app.get('/shopify/callback', (req,res) => {
     const {shop,hmac,code,state} = req.query;
     const stateCookie = cookie.parse(req.headers.cookie).state;
@@ -238,8 +242,9 @@ transport.sendMail({
 
 //////////////////////////Firebase functions///////////////////////
 
-
+/*
 function addFB(variantID,ETA){//handles strings separated with *
+    var vRef = db.collection('Vessel');  //collection name
     var v_array = variantID.split("*"); //splits based on SHOPIFY for each product
     var ETA_array = ETA.split("*"); //splits ETA dates based on shopify for each product added
     var product_array = [];
@@ -248,7 +253,7 @@ function addFB(variantID,ETA){//handles strings separated with *
         id: v_array[i],
         msg: ETA_array[i],
         };
-         db.collection('Vessel').doc(v_array[i]).set(obj);
+         vRef.doc(v_array[i]).set(obj);
         product_array.push(obj);
     }
     //product_array contains an array of the objects
@@ -256,33 +261,22 @@ function addFB(variantID,ETA){//handles strings separated with *
     return product_array;
 }
 
-function getFB(array){//currently need to work on this function 
-var result_array = [];
-for(var i = 0; i < array.length; i++){
-var docRef = db.collection("Vessel").doc(array[i].id);
-
-docRef.get().then(function(doc) {
-    if (doc.exists) {
+async function getFB(){
+    var result_array = new Array();
+    var vRef = db.collection('Vessel');  //collection name
+    var allproducts = await vRef.get();//asynch
+    for(index of allproducts.docs){
         var obj = {//object that will be inside the array
-        id: doc.data().id,
-        msg: doc.data().msg,
+            id: index.id,
+            msg: index.data().msg,
         };
         result_array.push(obj);
-        console.log("result arraay" + result_array[i].id);
-        console.log("Document data:", obj);
-    } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-    }
-}).catch(function(error) {
-    console.log("Error getting document:", error);
-}); 
-}
-    
+    }  
+    console.log(result_array);
     return result_array;
-
 }
 
+*/
 ///////////// Start the Server /////////////
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
