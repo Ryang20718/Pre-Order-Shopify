@@ -15,6 +15,7 @@ var bodyParser = require('body-parser')
 var nodemailer = require('nodemailer');
 var mandrillTransport = require('nodemailer-mandrill-transport');
 ///////////firebase admin sdk///////////////
+/*
 var admin = require("firebase-admin");
 
 admin.initializeApp({
@@ -27,6 +28,7 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
+*/
 ///////////////End FireBase admin////////////
 
 const app = express();
@@ -242,6 +244,22 @@ transport.sendMail({
 
 //////////////////////////Firebase functions///////////////////////
 
+
+/*
+var product_array = [];
+ v_array = [232424,1234556];
+ETA_array = [12-13-13,1-1-1];
+  var vRef = db.collection('Vessel');  //collection name  
+for(var i = 0; i < v_array.length;i++){
+var obj = {//object that will be inside the array
+    id: v_array[i],
+    msg: ETA_array[i],
+    };
+    vRef.doc(v_array[i]).set(obj);
+    product_array.push(obj);
+}
+console.log(product_array);
+*/
 /*
 function addFB(variantID,ETA){//handles strings separated with *
     var vRef = db.collection('Vessel');  //collection name
