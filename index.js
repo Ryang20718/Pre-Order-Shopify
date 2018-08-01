@@ -183,7 +183,7 @@ var transporter = nodemailer.createTransport({
 var mailOptions = {
   from: receiver,
   to: process.env.EMAIL_USER,
-  subject: 'inquiries',
+  subject: receiver + " inquiries",
   text: eta_product
 };
 
