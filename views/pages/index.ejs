@@ -6,7 +6,7 @@
 
 <body>
 <script>
-  function clean{
+  function clean(){
     $.ajax({
 	url: "https://preorder-app.herokuapp.com/issues",
 	type: "POST",
@@ -14,7 +14,7 @@
     data:{"email":receiver_email, "message": receiver_message},
 	crossDomain: true,
 	success: function (data) {
-        alert("cleaned successfully")
+        alert("cleaned successfully");
 	},
 	error: function (errMsg) {
 		alert(errMsg);
@@ -41,7 +41,7 @@
       </ul>
       <ul>
           <h3>Clean Pre-Order Products</h3>
-          <a onclick = "clean()"type="button" class="btn btn-lg btn-default" href="https://github.com/Ryang20718">Submit</a>
+          <a onclick = "clean()" type="button" class="btn btn-lg btn-default" href="https://github.com/Ryang20718">Submit</a>
       </ul>
     </div>
     <div class="col-md-6">
