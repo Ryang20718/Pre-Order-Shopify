@@ -65,18 +65,17 @@ app//homepage
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
 
-//shopify posts results to firebase cloudstore
-app.post('/postResults', cors(), function(req, res){
-    //addFB(req.body.variantID,req.body.ETA);//adds to database
-    console.log(req.body.ETA);
-    console.log(req.body.variantID);
-  res.send(req.body.ETA)
-});
 
 //mandrill email
 app.post('/email', cors(), function(req, res){
-    getReceiver(req.body.email,req.body.message);
     vesselMandrill(req.body.email,req.body.message);
+    console.log(req.body.email);
+    res.send('Mail Has Been Sent!')
+});
+
+//form inquiries
+app.post('/issues', cors(), function(req, res){
+    getReceiver(req.body.email,req.body.message);
     console.log(req.body.email);
     res.send('Mail Has Been Sent!')
 });
@@ -182,9 +181,9 @@ var transporter = nodemailer.createTransport({
 
 
 var mailOptions = {
-  from: 'youremail@gmail.com',
-  to: receiver,
-  subject: 'Vessel Pre Order',
+  from: receiver,
+  to: process.env.EMAIL_USER,
+  subject: 'inquiries',
   text: eta_product
 };
 

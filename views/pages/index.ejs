@@ -8,9 +8,10 @@
 <script>
   function clean{
     $.ajax({
-	url: "https://inventory-shop-oauth.herokuapp.com/clean",
+	url: "https://preorder-app.herokuapp.com/issues",
 	type: "POST",
 	dataType: "json",
+    data:{"email":receiver_email, "message": receiver_message},
 	crossDomain: true,
 	success: function (data) {
         alert("cleaned successfully")
