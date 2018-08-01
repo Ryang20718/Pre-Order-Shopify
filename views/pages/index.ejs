@@ -1,1 +1,70 @@
-<html>hello world</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+</head>
+
+<body>
+<script>
+  function clean{
+    $.ajax({
+	url: "https://inventory-shop-oauth.herokuapp.com/clean",
+	type: "POST",
+	dataType: "json",
+	crossDomain: true,
+	success: function (data) {
+        alert("cleaned successfully")
+	},
+	error: function (errMsg) {
+		alert(errMsg);
+	}
+});
+  }
+</script>
+
+
+<div class="jumbotron text-center">
+  <div class="container">
+
+    <h1>Pre-Order Inventory</h1>
+    <a type="button" class="btn btn-lg btn-default" href="https://github.com/Ryang20718"><span class="glyphicon glyphicon-download"></span>Github</a>
+  </div>
+</div>
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-6">
+      <ul>
+          <h2>Instructions</h2>
+          <ol></ol>
+      </ul>
+      <ul>
+          <h3>Clean Pre-Order Products</h3>
+          <a onclick = "clean()"type="button" class="btn btn-lg btn-default" href="https://github.com/Ryang20718">Submit</a>
+      </ul>
+    </div>
+    <div class="col-md-6">
+<div style="padding-bottom:40px;">
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleTextarea">Issues</label>
+    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+    </div>
+          
+    </div>
+  </div> <!-- row -->
+   <div class="alert alert-info text-center" role="alert">
+    Contact me if you have any issues.
+  </div>
+</div>
+
+</body>
+</html>
