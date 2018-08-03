@@ -20,7 +20,7 @@ const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
 const shopifyApiSecretKey = process.env.SHOPIFY_API_SECRET_KEY;
 const scopes = 'write_products';
-const appUrl = 'https://preorder-app.herokuapp.com';
+const appUrl = 'https://50aec6e3.ngrok.io';
 
 //body parser
 app.use(bodyParser.urlencoded({ extended: false })) 
@@ -147,7 +147,7 @@ app.get('/shopify/callback', (req,res) => {
         .then((accessTokenResponse) => {
             const accessToken = accessTokenResponse.access_token;
             
-            const apiRequestUrl = 'https://' + shop + '/admin/shop.json';// GET URL
+            const apiRequestUrl = 'https://' + shop + '/admin/products.json';// GET URL
             const apiRequestHeader = {
                 'X-Shopify-Access-Token': accessToken
             };
@@ -219,6 +219,9 @@ transport.sendMail({
   }
 });
 }
+
+
+
 
 ///////////// Start the Server /////////////
 
