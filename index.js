@@ -92,6 +92,8 @@ app.get('/shopify', (req, res) => {
   res.cookie('state', state) // should be encrypted in production
   res.redirect(installShopUrl);
 });
+
+
 /*
 app.get('/shopify/callback', async (req, res) => {
   const { shop, code, state } = req.query;
