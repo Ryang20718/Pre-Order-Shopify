@@ -46,6 +46,20 @@ $.ajax({
 });
     alert("Updated!");
   }
+        
+        
+setInterval(function() {//will update shopify every couple of minutes
+$.ajax({
+	url: "https://inventory-shop-oauth.herokuapp.com/getAllProductsNeedMsg",
+	type: "GET",
+	dataType: "json",
+	crossDomain: true
+});
+    alert("Emailed AlL products that need ETA-Messages");
+}, 86400000); // 1 days worth of milliseconds       
+
+        
+
 </script>
 
 <div class="jumbotron text-center">
