@@ -14,7 +14,8 @@ var bodyParser = require('body-parser');
 //mandrill
 var nodemailer = require('nodemailer');
 var mandrillTransport = require('nodemailer-mandrill-transport');
-
+//authentication
+var basicAuth = require('basic-auth');
 
 const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
@@ -58,12 +59,34 @@ const fetchShopData = async (shop, accessToken) => await axios(buildShopDataRequ
 });
 
 ///////////// Route Handlers /////////////
+var auth = function (req, res, next) {
+    function unauthorized(res) {
+        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+        return res.send(401);
+    };
+
+    var user = basicAuth(req);
+
+    if (!user || !user.name || !user.pass) {
+        return unauthorized(res);
+    };
+
+    if (user.name === 'foo' && user.pass === 'bar') {
+        return next();
+    } else {
+        return unauthorized(res);
+    };
+};
+
+app.get('/', auth, function (req, res) {
+    res.redirect('/home');
+});
 
 app//homepage
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
+  .get('/home', (req, res) => res.render('pages/index'))
 
 
 //mandrill email
@@ -168,6 +191,11 @@ app.get('/shopify/callback', (req,res) => {
         res.status(400).send('Required Parameters missing');
     }
 });
+
+
+
+
+
 
 //functions to send mail through regular gmail in case Mandrill runs out of mail sends
 
