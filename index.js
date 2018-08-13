@@ -117,6 +117,13 @@ app.get('/shopify', (req, res) => {
 });
 
 
+app//homepage
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/instructions', (req, res) => res.render('pages/instructions'))
+
+
 /*
 app.get('/shopify/callback', async (req, res) => {
   const { shop, code, state } = req.query;
