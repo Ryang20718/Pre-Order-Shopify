@@ -71,7 +71,7 @@ var auth = function (req, res, next) {
         return unauthorized(res);
     };
 
-    if (user.name.toLowerCase() === 'vessel' && user.pass.toLowerCase() === 'bags') {
+    if (user.name.toLowerCase() === process.env.USER && user.pass.toLowerCase() === process.env.PASS) {
         return next();
     } else {
         return unauthorized(res);
