@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+</head> 
+    <body>
+<div style="padding-bottom:40px;">
+<form method="post" action="https://preorder-app.herokuapp.com/issues">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input name = "email"type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleTextarea">Issues</label>
+    <textarea name = "message" class="form-control" id="exampleTextarea" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+    </div>
+</body>
+</html>
