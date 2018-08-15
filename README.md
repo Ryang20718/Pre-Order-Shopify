@@ -28,6 +28,6 @@ First clone and install all the dependencies
 Follow through the steps of setting up Heroku and configure the values so the code can access it => [Can be found here](https://devcenter.heroku.com/articles/config-vars "Can be found here")
 
 #### Sample 
-![](frontend.png)
+![](/public/frontend.png)
 
 #### In Progress
