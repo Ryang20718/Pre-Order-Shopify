@@ -21,7 +21,7 @@ const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
 const shopifyApiSecretKey = process.env.SHOPIFY_API_SECRET_KEY;
 const scopes = 'write_products';
-const appUrl = 'https://preorder-app.herokuapp.com/';
+const appUrl = 'https://preorder-app.herokuapp.com';
 
 //body parser
 app.use(bodyParser.urlencoded({ extended: false })) 
