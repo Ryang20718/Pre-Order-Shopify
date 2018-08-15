@@ -21,7 +21,7 @@ const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
 const shopifyApiSecretKey = process.env.SHOPIFY_API_SECRET_KEY;
 const scopes = 'write_products';
-const appUrl = 'https://50aec6e3.ngrok.io';
+const appUrl = 'https://21ff9197.ngrok.io';
 
 //body parser
 app.use(bodyParser.urlencoded({ extended: false })) 
@@ -59,26 +59,8 @@ const fetchShopData = async (shop, accessToken) => await axios(buildShopDataRequ
 });
 
 ///////////// Route Handlers /////////////
-var auth = function (req, res, next) {
-    function unauthorized(res) {
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        return res.send(401);
-    };
 
-    var user = basicAuth(req);
-
-    if (!user || !user.name || !user.pass) {
-        return unauthorized(res);
-    };
-
-    if (user.name.toLowerCase() === process.env.USER && user.pass.toLowerCase() === process.env.PASS) {
-        return next();
-    } else {
-        return unauthorized(res);
-    };
-};
-
-app.get('/', auth, function (req, res) {
+app.get('/shopify/callback', function (req, res) {
     res.redirect('/home');
 });
 
@@ -123,34 +105,6 @@ app//homepage
   .set('view engine', 'ejs')
   .get('/instructions', (req, res) => res.render('pages/instructions'))
 
-
-/*
-app.get('/shopify/callback', async (req, res) => {
-  const { shop, code, state } = req.query;
-  const stateCookie = cookie.parse(req.headers.cookie).state;
-  if (state !== stateCookie) { return res.status(403).send('Cannot be verified')}
-  const { hmac, ...params } = req.query
-  const queryParams = querystring.stringify(params)
-  const hash = generateEncryptedHash(queryParams)
-  if (hash !== hmac) { return res.status(400).send('HMAC validation failed')}
-  try {
-    const data = {
-      client_id: shopifyApiPublicKey,
-      client_secret: shopifyApiSecretKey,
-      code
-    };
-    const tokenResponse = await fetchAccessToken(shop, data)
-    const { access_token } = tokenResponse.data
-    const shopData = await fetchShopData(shop, access_token)
-    res.send(shopData.data.shop)
-  } catch(err) {
-    console.log(err)
-    res.status(500).send('something went wrong')
-  }
-    
-});
-*/
-//shopify verification
 app.get('/shopify/callback', (req,res) => {
     const {shop,hmac,code,state} = req.query;
     const stateCookie = cookie.parse(req.headers.cookie).state;
@@ -185,7 +139,9 @@ app.get('/shopify/callback', (req,res) => {
             };
             request.get(apiRequestUrl,{headers: apiRequestHeader})
             .then((apiResponse) =>{
-                res.end(apiResponse);
+                
+                res.redirect('/home')
+                //res.end(apiResponse);
             })
             .catch((error) => {
                 res.status(error.statusCode).send(error.error.error_description);
