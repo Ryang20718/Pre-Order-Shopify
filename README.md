@@ -30,4 +30,5 @@ Follow through the steps of setting up Heroku and configure the values so the co
 #### Sample 
 ![](/public/frontend.png)
 
-#### In Progress
+#### Backend 
+[Backend Link](https://github.com/Ryang20718/Inventory "Backend Link")
