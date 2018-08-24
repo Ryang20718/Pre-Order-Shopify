@@ -21,8 +21,8 @@ const app = express();
 const shopifyApiPublicKey = process.env.SHOPIFY_API_PUBLIC_KEY;
 const shopifyApiSecretKey = process.env.SHOPIFY_API_SECRET_KEY;
 const scopes = 'write_products';
+//const appUrl = 'https://preorder-app.herokuapp.com';
 const appUrl = 'https://preorder-app.herokuapp.com';
-
 //body parser
 app.use(bodyParser.urlencoded({ extended: false })) 
 
@@ -139,7 +139,6 @@ app.get('/shopify/callback', (req,res) => {
             };
             request.get(apiRequestUrl,{headers: apiRequestHeader})
             .then((apiResponse) =>{
-                
                 res.redirect('/home')
                 //res.end(apiResponse);
             })
@@ -154,7 +153,6 @@ app.get('/shopify/callback', (req,res) => {
         res.status(400).send('Required Parameters missing');
     }
 });
-
 
 
 
