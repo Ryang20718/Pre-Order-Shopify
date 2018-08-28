@@ -189,8 +189,20 @@ transporter.sendMail(mailOptions, function(error, info){
 
 //mandrill function
 function vesselMandrill(receiver,message){
-
- 
+var fs = require('fs'); //Filesystem    
+var handlebars = require('handlebars');
+var content = fs.readFileSync("./emailTemplate/pre-OrderTemplate.html","utf-8");
+var replacementETA = "We will get back to you about when the product will be back in stock";
+if(message.length < 1){
+    message = replacementETA;
+}
+var template = handlebars.compile(content);
+var replacements = {
+    username: receiver,
+    ETA:message
+}; 
+var htmlToSend = template(replacements);
+    
 var transport = nodemailer.createTransport(mandrillTransport({
   auth: {
     apiKey: process.env.MANDRILL_API
@@ -201,7 +213,7 @@ transport.sendMail({
   from: 'info@vesselbags.com',
   to: receiver,
   subject: 'Vessel Pre Order',
-  html: message
+  html:htmlToSend
 }, function(err, info) {
   if (err) {
     console.error(err);
