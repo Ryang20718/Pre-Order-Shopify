@@ -213,7 +213,7 @@ transport.sendMail({
   from: 'info@vesselbags.com',
   to: receiver,
   subject: 'Vessel Pre Order',
-  html:htmlToSend
+  html: htmlToSend
 }, function(err, info) {
   if (err) {
     console.error(err);
