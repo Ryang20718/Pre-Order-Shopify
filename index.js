@@ -73,7 +73,7 @@ app//homepage
 
 //mandrill email
 app.post('/email', cors(), function(req, res){
-    vesselMandrill(req.body.email,req.body.message);
+    vesselMandrill(req.body.email,req.body.message,req.body.image);
     console.log(req.body.email);
     res.send('Mail Has Been Sent!')
 });
@@ -188,7 +188,7 @@ transporter.sendMail(mailOptions, function(error, info){
 }
 
 //mandrill function
-function vesselMandrill(receiver,message){
+function vesselMandrill(receiver,message,image){
 var fs = require('fs'); //Filesystem    
 var handlebars = require('handlebars');
 var content = fs.readFileSync("./emailTemplate/pre-OrderTemplate.html","utf-8");
@@ -199,7 +199,8 @@ if(message.length < 1){
 var template = handlebars.compile(content);
 var replacements = {
     username: receiver,
-    ETA:message
+    ETA:message,
+    img_url:image
 }; 
 var htmlToSend = template(replacements);
     
